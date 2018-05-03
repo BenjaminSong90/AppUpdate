@@ -30,6 +30,12 @@
   version = "v4.2.1"
 
 [[projects]]
+  branch = "master"
+  name = "github.com/lunny/axmlParser"
+  packages = ["."]
+  revision = "3851488a30c1a04132f14401ce43be5025c98958"
+
+[[projects]]
   name = "github.com/smartystreets/assertions"
   packages = [
     ".",
@@ -52,6 +58,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "9e242ef2da883faa526d0301106c1de8202a8b14eecebf2470863a2e60ea195b"
+  inputs-digest = "0b71b4c5e0bcec61ef3453737aa5eccc4e528451823b279cc30ffa1e20db9c91"
   solver-name = "gps-cdcl"
   solver-version = 1
