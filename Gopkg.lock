@@ -10,9 +10,11 @@
     "context/param",
     "grace",
     "logs",
+    "orm",
     "session",
     "toolbox",
-    "utils"
+    "utils",
+    "validation"
   ]
   revision = "bf5c5626ab429e66d88602e1ab1ab5fbf4629a01"
   version = "v1.9.2"
@@ -22,6 +24,12 @@
   packages = ["."]
   revision = "06ea1031745cb8b3dab3f6a236daf2b0aa468b7e"
   version = "v3.2.0"
+
+[[projects]]
+  name = "github.com/go-sql-driver/mysql"
+  packages = ["."]
+  revision = "a0583e0143b1624142adab07e0e97fe106d99561"
+  version = "v1.3"
 
 [[projects]]
   branch = "master"
@@ -64,6 +72,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "41d4c43cb6443124c895d7a4ac5cf2c58478e6e73ced62e2681d576c7162d53a"
+  inputs-digest = "b1002fbefea2807da4ab9750ab30eb0f5883a2b5841aad2140184e966498988d"
   solver-name = "gps-cdcl"
   solver-version = 1
