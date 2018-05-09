@@ -9,33 +9,35 @@
 <body>
 
 
-
 <div id="id_login">
     <div v-if="is_show_tip">
-    <p>{{tip_info}}</p>
-        <br>
+        <p style="color: red;">{{tip_info}}</p>
     </div>
-    <div>
-        UserName:<input type="text" name="user_name" v-model="user_name" placeholder="username">
-    </div>
-
-
     <div v-if="!isLogin">
+        UserName:<input type="text" name="user_name" v-model="user_name" placeholder="username">
         <br>
-        E-mail :<input type="email" name="email" v-model="email" placeholder="email">
     </div>
-    <br>
+
+
+    <div>
+        E-mail :<input type="email" name="email" v-model="email" placeholder="email">
+        <br>
+        <br>
+    </div>
+
 
 
     <div>
         PassWord :<input type="password" name="password" v-model="password" placeholder="password">
+        <br>
     </div>
 
 
     <div v-if="!isLogin">
-        <br>
+
         PassWord Again :<input type="password" name="password_again" v-model="password_again"
                                placeholder="password again">
+        <br>
     </div>
 
     <div v-if="isLogin">
@@ -62,27 +64,26 @@
             email: "",
             isLogin: true,
             ln_switch: "Go Register",
-            is_show_tip : false,
-            tip_info:""
+            is_show_tip: false,
+            tip_info: ""
         },
 
         methods: {
             login: function (event) {
-                if (this.user_name.length <= 6) {
-                    alert('请输入长度大于6的用户名');
-                } else if (this.password.length <= 6 || this.password_again.length <= 6) {
-                    alert('请输入长度大于6的密码');
-                } else if(this.password.length != this.password_again.length){
-                    alert("两次密码不一致")
-                }else{
-                    this.$http.post("/user",{"email":this.email,"username":this.username,"password":this.password},{emulateJSON: true})
-                            .then((r)=>{
-                                    alert("<s>"+r);
-                                },
-                            (e)=>{
-                                    alert("<e>"+e);
-                            });
+                if (this.email === "" || this.password === "") {
+                    this.is_show_tip = true;
+                    this.tip_info = "邮箱或密码不能为空"
+                } else {
+                    this.$http.post("/login", {"email": this.email, "password": this.password}, {emulateJSON: true})
+                            .then((r) => {
+                                        alert(JSON.stringify(r));
+                                    },
+                                    (e) => {
+                                        alert("<e>" + e);
+                                    });
                 }
+
+
             },
 
             need_register: function (event) {
@@ -97,17 +98,22 @@
             register: function (event) {
                 if (this.user_name.length <= 6) {
                     alert('请输入长度大于6的用户名');
+                } else if (this.password.length != this.password_again.length) {
+                    alert("两次密码不一致")
                 } else if (this.password.length <= 6 || this.password_again.length <= 6) {
                     alert('请输入长度大于6的密码');
-                } else if(this.password.length != this.password_again.length){
-                    alert("两次密码不一致")
-                }else{
-                    this.$http.post("/user",{"email":this.email,"username":this.username,"password":this.password},{emulateJSON: true})
-                            .then((r)=>{
-                                        alert("<s>"+JSON.stringify(r.body));
+                } else {
+                    this.$http.post("/user", {
+                        "email": this.email,
+                        "username": this.username,
+                        "password": this.password
+                    }, {emulateJSON: true})
+                            .then((r) => {
+                                        this.is_show_tip = true;
+                                        this.tip_info = r.body["describe"];
                                     },
-                                    (e)=>{
-                                        alert("<e>"+e);
+                                    (e) => {
+                                        alert("<e>" + e);
                                     });
                 }
             }
