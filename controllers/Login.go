@@ -48,7 +48,7 @@ func (ctx *LoginController) Post() {
 
 
 
-	token := tokenTools.CreateToken(user.UserName)
+	token := tokenTools.CreateToken(user.Email)
 
 	result["status"] = "SUCCESS"
 	result["token"] = token

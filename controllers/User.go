@@ -43,7 +43,7 @@ func (ctx *UserController) Post(){
 	user.UserName = ctx.Input().Get("username")
 	_,error := models.UserAdd(user)
 	if error!= nil{
-		token := tokenTools.CreateToken(user.UserName)
+		token := tokenTools.CreateToken(user.Email)
 		result["status"] = "OK"
 		result["token"] = token
 		result["describe"] = "The user create success"
