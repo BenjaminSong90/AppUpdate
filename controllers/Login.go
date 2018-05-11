@@ -4,6 +4,7 @@ import (
 	"github.com/astaxie/beego"
 	"AppUpdate/models"
 	"AppUpdate/tools/tokenTools"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type LoginController struct {
@@ -35,9 +36,9 @@ func (ctx *LoginController) Post() {
 		return
 	}
 
-	beego.Debug("<>"+user.Password+"<>"+password)
+	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
 
-	if password != user.Password {
+	if err != nil {
 		result["status"] = "ERROR"
 		result["token"] = ""
 		result["describe"] = "The password id invalid"

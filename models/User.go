@@ -23,7 +23,7 @@ func (a *User) TableName() string {
 func UserAdd(role *User) (int64, error) {
 	id, err := orm.NewOrm().Insert(role)
 	if err != nil {
-		return 0, err
+		return -1, err
 	}
 	return id, nil
 }

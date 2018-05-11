@@ -4,13 +4,14 @@ import (
 	"github.com/astaxie/beego"
 	"AppUpdate/models"
 	"AppUpdate/tools/tokenTools"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type UserController struct {
 	beego.Controller
 }
 
-func (ctx *UserController) Post(){
+func (ctx *UserController) Post() {
 	result := make(map[string]interface{})
 
 	email := ctx.Input().Get("email")
@@ -25,9 +26,9 @@ func (ctx *UserController) Post(){
 	//	return
 	//}
 
-	_,err := models.GetUserByEmail(email)
+	_, err := models.GetUserByEmail(email)
 
-	if err == nil{
+	if err == nil {
 		result["status"] = "ERROR"
 		result["token"] = ""
 		result["describe"] = "The user has already existed"
@@ -39,17 +40,20 @@ func (ctx *UserController) Post(){
 	user := &models.User{}
 	user.Email = email
 	user.Active = true
-	user.Password = ctx.Input().Get("password")
+	spassword, _ := bcrypt.GenerateFromPassword([]byte(ctx.Input().Get("password")), bcrypt.DefaultCost)
+	user.Password = string(spassword)
 	user.UserName = ctx.Input().Get("username")
-	_,error := models.UserAdd(user)
-	if error!= nil{
+	_, error := models.UserAdd(user)
+
+	beego.Debug(error == nil)
+	if error == nil {
 		token := tokenTools.CreateToken(user.Email)
 		result["status"] = "OK"
 		result["token"] = token
 		result["describe"] = "The user create success"
 		ctx.Data["json"] = result
 		ctx.ServeJSON()
-	}else{
+	} else {
 		result["status"] = "ERROR"
 		result["token"] = ""
 		result["describe"] = "User insert error"
