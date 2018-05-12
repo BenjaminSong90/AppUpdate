@@ -2,17 +2,19 @@ package tokenTools
 
 import (
 	"github.com/dgrijalva/jwt-go"
-	"fmt"
 )
 
-func CheckToken(token string)(bool){
-	_,err := jwt.Parse(token, func(token *jwt.Token) (interface{}, error) {
-		return Secretkey, nil
+func CheckToken(token string)(string, error){
+	ctoken,err := jwt.ParseWithClaims(token, &JwtCustomClaims{}, func(token *jwt.Token) (interface{}, error) {
+		return []byte(Secretkey), nil
 	})
 
-	if err != nil {
-		fmt.Print("parase with claims failed")
-		return false
+	if claims, ok := ctoken.Claims.(*JwtCustomClaims); ok && ctoken.Valid {
+		return claims.Email, nil
+
+	} else {
+		return "", err
 	}
-	return true
+
+
 }

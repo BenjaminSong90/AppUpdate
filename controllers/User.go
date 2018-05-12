@@ -28,6 +28,7 @@ func (ctx *UserController) Post() {
 
 	_, err := models.GetUserByEmail(email)
 
+
 	if err == nil {
 		result["status"] = "ERROR"
 		result["token"] = ""
@@ -36,6 +37,7 @@ func (ctx *UserController) Post() {
 		ctx.ServeJSON()
 		return
 	}
+
 
 	user := &models.User{}
 	user.Email = email
@@ -60,5 +62,34 @@ func (ctx *UserController) Post() {
 		ctx.Data["json"] = result
 		ctx.ServeJSON()
 	}
+}
+
+func (ctx *UserController) Get() {
+	result := make(map[string]interface{})
+
+	token := ctx.Ctx.Input.Header("token")
+	beego.Debug("token %s",token)
+
+	userEmail, err := tokenTools.CheckToken(token)
+
+	beego.Debug("userEmail:  "+userEmail)
+	if err != nil {
+		result["status"] = "ERROR"
+		result["describe"] = "token is error"
+		result["user_info"] = nil
+		ctx.Data["json"] = result
+		ctx.ServeJSON()
+		return
+	}
+
+	user, err := models.GetUserByEmail(userEmail)
+
+	result["user_info"] = user
+
+	ctx.Data["json"] = result
+	ctx.ServeJSON()
+
 
 }
+
+

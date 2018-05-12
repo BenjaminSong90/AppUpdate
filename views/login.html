@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
+    <script src="/static/js/localmanager.js" charset="utf-8"></script>
     <script src="/static/js/vue.2_5_16.js" charset="utf-8"></script>
     <script src="/static/js/vue-resource.1_5_0.js" charset="utf-8"></script>
+
 </head>
 <body>
 
@@ -56,6 +58,7 @@
 </div>
 
 <script type="text/javascript">
+
     var loginVue = new Vue({
         el: '#id_login',
         data: {
@@ -76,7 +79,8 @@
                 } else {
                     this.$http.post("/login", {"email": this.email, "password": this.password}, {emulateJSON: true})
                             .then((r) => {
-                                        alert(JSON.stringify(r));
+                                        token = r.body["token"]
+                                        window.localStorage.setItem("token", token)
                                     },
                                     (e) => {
                                         alert("<e>" + e);
@@ -105,12 +109,14 @@
                 } else {
                     this.$http.post("/user", {
                         "email": this.email,
-                        "username": this.username,
+                        "username": this.user_name,
                         "password": this.password
                     }, {emulateJSON: true})
                             .then((r) => {
                                         this.is_show_tip = true;
                                         this.tip_info = r.body["describe"];
+                                        token = r.body["token"]
+                                        window.localStorage.setItem("token", token)
 
                                     },
                                     (e) => {

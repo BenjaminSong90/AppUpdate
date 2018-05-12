@@ -36,6 +36,6 @@ func UserDelete(role *User) (num int64, err error) {
 func GetUserByEmail(email string) ( *User, error) {
 	user := User{}
 	query := orm.NewOrm().QueryTable(TableName("user"))
-	err := query.Filter("Email", email).One(&user)
+	err := query.Filter("email", email).One(&user)
 	return &user, err
 }
