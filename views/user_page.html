@@ -1,19 +1,40 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>User</title>
-</head>
+    <script src="/static/js/vue.2_5_16.js" charset="utf-8"></script>
+    <script src="/static/js/vue-resource.1_5_0.js" charset="utf-8"></script></head>
 <body>
 <div id="user">
     <div>
-        Name : {{.name}}
+        Name : <h1>{{user_name}}</h1>
     </div>
     <div>
-
+        E-mail : <h1>{{user_email}}</h1>
     </div>
 
 </div>
+<script type="text/javascript">
+    var userInfo = new Vue({
+        el: '#user',
+        data :{
+            user_name: "",
+            user_email: ""
+        },
+        mounted: function () {
+            token = window.localStorage.getItem("token");
+            this.$http.get("/user",{headers:{'token':token}}).then((r)=>{
+                this.user_name = r.body["UserName"];
+                this.user_email = r.body["UserEmail"];
+                alert(r.bodyText);
+            },(e)=>{
+
+            });
+        }
+
+    });
+</script>
 
 </body>
 </html>

@@ -11,6 +11,12 @@ type UserController struct {
 	beego.Controller
 }
 
+type UserResult struct {
+	UserName 	string
+	UserEmail	string
+	IsActive	bool
+}
+
 func (ctx *UserController) Post() {
 	result := make(map[string]interface{})
 
@@ -68,7 +74,16 @@ func (ctx *UserController) Get() {
 	result := make(map[string]interface{})
 
 	token := ctx.Ctx.Input.Header("token")
-	beego.Debug("token %s",token)
+	beego.Debug("token:  "+token)
+
+	if token == ""{
+		result["status"] = "ERROR"
+		result["describe"] = "token is nil"
+		result["user_info"] = nil
+		ctx.Data["json"] = result
+		ctx.ServeJSON()
+		return
+	}
 
 	userEmail, err := tokenTools.CheckToken(token)
 
@@ -83,13 +98,17 @@ func (ctx *UserController) Get() {
 	}
 
 	user, err := models.GetUserByEmail(userEmail)
+	resultUser := &UserResult{}
+	resultUser.IsActive = user.Active
+	resultUser.UserName = user.UserName
+	resultUser.UserEmail = user.Email
 
-	result["user_info"] = user
+	result["status"] = "SUCCESS"
+	result["describe"] = "get user info success"
+	result["user_info"] = resultUser
 
-	ctx.Data["json"] = result
+	ctx.Data["json"] = resultUser
 	ctx.ServeJSON()
-
-
 }
 
 
