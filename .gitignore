@@ -14,6 +14,7 @@
 .glide/
 
 vendor/*
+static/uploadfile/*
 !vendor/vendor.json
 coverage.out
 nohup.out
